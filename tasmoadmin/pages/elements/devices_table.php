@@ -35,7 +35,7 @@ if (isset($deviceLinks) && $deviceLinks && !isset($deviceLinkActionText)) {
         <th data-tablesaw-sortable-col data-tablesaw-sortable-numeric><?php echo __("TABLE_HEAD_POSITION", "DEVICES"); ?></th>
         <th data-tablesaw-sortable-col><?php echo __("TABLE_HEAD_NAME", "DEVICES"); ?></th>
         <th data-tablesaw-sortable-col><?php echo __("TABLE_HEAD_IP", "DEVICES"); ?></th>
-        <th><?php echo __("TAB_HL_POWER_ON_OFF", "BLINX ADD"); ?></th>
+        <th><?php echo __("TAB_HL_POWER_ON_OFF", "BLINX_ADD"); ?></th>
         <th data-tablesaw-sortable-col data-tablesaw-sortable-numeric>
             <i class="fas fa-signal"
                title='<?php echo __("TABLE_HEAD_RSSI", "DEVICES"); ?>'
@@ -140,7 +140,7 @@ if (isset($devices) && !empty($devices)):
                             <input type="checkbox">
                             <i></i>
                         </label>*/ ?>
-                        <?php echo __("TAB_HL_POWER_OFF", "BLINX ADD"); ?>
+                        <?php echo __("TAB_HL_POWER_OFF", "BLINX_ADD"); ?>
 
                     </td>
                     <td class='rssi'>
@@ -398,7 +398,7 @@ endif; ?>
         <th><?php echo __("TABLE_HEAD_POSITION", "DEVICES"); ?></th>
         <th><?php echo __("TABLE_HEAD_NAME", "DEVICES"); ?></th>
         <th><?php echo __("TABLE_HEAD_IP", "DEVICES"); ?></th>
-        <th><?php echo __("TAB_HL_POWER_ON_OFF", "BLINX ADD"); ?></th>
+        <th><?php echo __("TAB_HL_POWER_ON_OFF", "BLINX_ADD"); ?></th>
         <th>
             <i class="fas fa-signal"
                title='<?php echo __("TABLE_HEAD_RSSI", "DEVICES"); ?>'

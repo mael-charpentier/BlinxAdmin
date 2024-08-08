@@ -60,7 +60,7 @@
 					<label class="form-check-label custom-control-label"
 						   for="cb_<?php echo $value->access_name; ?>"
 					>
-							<?php echo __("TAB_HL_PORT", "BLINX ADD") . $key . ", type :" . $value->name . "and ";
+							<?php echo __("TAB_HL_PORT", "BLINX_ADD") . $key . ", type :" . $value->name . "and ";
 							foreach($value as $k => $v):
 								if($k != "name" && $k != "access_name"){
 									echo $k . ":" . $v;
@@ -77,12 +77,12 @@
 	</div>
 	<div class="form-group col">
 		<label for="deltaTime">
-			<?php echo __("TAB_HL_DELTA_TIME", "BLINX ADD"); ?>
+			<?php echo __("TAB_HL_DELTA_TIME", "BLINX_ADD"); ?>
 		</label>
 		<select class="form-control custom-select" id="deltaTime" name='deltaTime'>
 			<option value='0'>
 				50ms 
-				<?php echo __("TAB_HL_50MS_NOT_SUPPORTED", "BLINX ADD"); ?>
+				<?php echo __("TAB_HL_50MS_NOT_SUPPORTED", "BLINX_ADD"); ?>
 			</option>
 			<option value='1'>
 				1s
@@ -106,7 +106,7 @@
 		<div class="col col-12">
 			<div class="text-right">
 				<button type='submit' class='btn btn-primary ' name='save' value='submit'>
-					<?php echo __("TAB_HL_GET_DATA", "BLINX ADD"); ?>
+					<?php echo __("TAB_HL_GET_DATA", "BLINX_ADD"); ?>
 				</button>
 			</div>
 		</div>

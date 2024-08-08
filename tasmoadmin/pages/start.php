@@ -9,7 +9,9 @@ $devices = $Sonoff->getDevices();
 ?>
 <div class='container-fluid'>
 	
-	<?php if (!empty($devices)):
+	<?php
+	/*
+	if (!empty($devices)):
 	    $nightmode = "";   //todo: make function
 	    $h = date('H');
 
@@ -116,6 +118,7 @@ if ($nightmode === "nightmode") {
 				<?php echo __("NO_DEVICES_FOUND", "STARTPAGE"); ?>
 			</div>
 		</div>
+	<?php */?>
 		<div class='row mt-5 justify-content-center text-center'>
 			<div class='col col-12 col-sm-2 '>
 				<a class="btn btn-primary"
@@ -131,7 +134,7 @@ if ($nightmode === "nightmode") {
 			</div>
 		</div>
 	
-	<?php endif; ?>
+	<?php /* endif; */ ?>
 </div>
 
 <script src="<?php echo $urlHelper->js("compiled/start"); ?>"></script>

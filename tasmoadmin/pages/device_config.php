@@ -230,7 +230,7 @@ $statusSensor = $Sonoff->getStatusSensor($device);
 							   role="tab"
 							   aria-controls="profile"
 							   aria-selected="false">
-								<?php echo __("TAB_HL_SENSOR_CONFIG", "BLINX ADD"); ?>
+								<?php echo __("TAB_HL_SENSOR_CONFIG", "BLINX_ADD"); ?>
 							</a>
 						</li>
 						<li class="nav-item">
@@ -241,7 +241,7 @@ $statusSensor = $Sonoff->getStatusSensor($device);
 							   role="tab"
 							   aria-controls="profile"
 							   aria-selected="false">
-								<?php echo __("TAB_HL_SENSOR_INPUT", "BLINX ADD"); ?>
+								<?php echo __("TAB_HL_SENSOR_INPUT", "BLINX_ADD"); ?>
 							</a>
 						</li>
 						<li class="nav-item">
@@ -252,7 +252,7 @@ $statusSensor = $Sonoff->getStatusSensor($device);
 							   role="tab"
 							   aria-controls="profile"
 							   aria-selected="false">
-								<?php echo __("TAB_HL_SENSOR_OUTPUT", "BLINX ADD"); ?>
+								<?php echo __("TAB_HL_SENSOR_OUTPUT", "BLINX_ADD"); ?>
 							</a>
 						</li>
 

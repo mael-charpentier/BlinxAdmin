@@ -70,12 +70,12 @@ $devices = $Sonoff->getDevices();
 				</div>
 				<div class="col col-auto ">
 					<button class='btn btn-secondary showConfigSensor'>
-						<?php echo __("TAB_HL_SENSOR_CONFIG", "BLINX ADD"); ?>
+						<?php echo __("TAB_HL_SENSOR_CONFIG", "BLINX_ADD"); ?>
 					</button>
 				</div>
 				<div class="col col-auto ">
 					<button class='btn btn-secondary showChangHostname'>
-						<?php echo __("TAB_HL_CHANGE_HOSTNAME", "BLINX ADD"); ?>
+						<?php echo __("TAB_HL_CHANGE_HOSTNAME", "BLINX_ADD"); ?>
 					</button>
 				</div>
 				<div class="col col-auto ">
@@ -112,25 +112,25 @@ $devices = $Sonoff->getDevices();
 			<div class='hostnameContainer row hostname-hidden d-none my-3'>
 				<div class="form-group col col-12 col-sm-6 col-md-7 col-lg-8 offset-0 offset-sm-1 mb-3 mb-sm-0">
 					<span>
-						<?php echo __("TAB_HL_BASE_HOSTNAME", "BLINX ADD"); ?>
+						<?php echo __("TAB_HL_BASE_HOSTNAME", "BLINX_ADD"); ?>
 					</span>
 					<input type='text' name='command' class='form-control hostnameInput' placeholder='new hostname'>
 				</div>
 				<div class="form-group col col-12 col-sm-6 col-md-7 col-lg-8 offset-0 offset-sm-1 mb-3 mb-sm-0">
 					<span>
-						<?php echo __("TAB_HL_BEGIN_ID_HOSTNAME", "BLINX ADD"); ?>
+						<?php echo __("TAB_HL_BEGIN_ID_HOSTNAME", "BLINX_ADD"); ?>
 					</span>
 					<input type='number' name='command' class='form-control hostnameInputBegin' min="0" value="0">
 				</div>
 				<div class="form-group col col-12 col-sm-6 col-md-7 col-lg-8 offset-0 offset-sm-1 mb-3 mb-sm-0">
 					<span>
-						<?php echo __("TAB_HL_STEP_ID_HOSTNAME", "BLINX ADD"); ?>
+						<?php echo __("TAB_HL_STEP_ID_HOSTNAME", "BLINX_ADD"); ?>
 					</span>
 					<input type='number' name='command' class='form-control hostnameInputStep' min="1"  value="1">
 				</div>
 				<div class="form-group col col-12 col-sm-4 col-md-3 col-lg-2 mb-0">
 					<button type='submit' class='btn btn-primary sendCommand w-100' name='sendCommand'>
-						<?php echo __("TAB_HL_SAVE_HOSTNAME", "BLINX ADD"); ?>
+						<?php echo __("TAB_HL_SAVE_HOSTNAME", "BLINX_ADD"); ?>
 					</button>
 				</div>
 				<small id="hostnameInputError" class="form-text col-12 col-sm-11 offset-0 offset-sm-1 d-none  px-0">
