@@ -119,6 +119,7 @@
 
 
 		<?php
+		if(isset($statusSensor->analog)){
 		foreach($statusSensor->analog as $key => $value):
 			if(in_array($value->name, ["Relay", "Relay_i"])){
 				?>
@@ -215,7 +216,8 @@
 	</div>
 </form>
 
-		<?php
+	<?php
 			}
 		endforeach;
-		?>
+	}
+	?>

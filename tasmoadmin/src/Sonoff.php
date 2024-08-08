@@ -40,12 +40,12 @@ class Sonoff
         return $this->responseParser->processResult($this->blinxApiSensor($device, 'bi', []));
     }
 
-    public function saveConfigSensor(Device $device, array $arg)
+    public function saveConfigSensor(Device $device, array $arg): string
     {
         return $this->blinxApiSensor($device, 'bc', $arg);
     }
 
-    public function saveConfigSensorJS($deviceId, array $arg)
+    public function saveConfigSensorJS($deviceId, array $arg): string
     {
         $device = $this->getDeviceById($deviceId);
 
@@ -53,13 +53,13 @@ class Sonoff
             $response = new \stdClass();
             $response->ERROR = sprintf('No devices found with ID: %d', $deviceId);
 
-            return $response;
+            return json_encode($response);
         }
         
         return $this->saveConfigSensor($device, $arg);
     }
 
-    public function saveNewHostname($deviceId, string $newName)
+    public function saveNewHostname($deviceId, string $newName): string
     {
         $device = $this->getDeviceById($deviceId);
 
@@ -76,7 +76,7 @@ class Sonoff
         return $this->blinxApiSensor($device, 'bn', $arg);
     }
 
-    public function blinxApiSensor(Device $device, String $endpoint, array $arg)
+    public function blinxApiSensor(Device $device, string $endpoint, array $arg): string
     {
         $url = $this->buildUrl($device, $endpoint, $arg);
 
@@ -86,7 +86,7 @@ class Sonoff
             $result = new \stdClass();
             $result->ERROR = __('CURL_ERROR', 'API').' => '.$exception->getMessage();
 
-            return $result;
+            return json_encode($result);
         }
 
         return $result->getContents();
