@@ -35,7 +35,7 @@ if (isset($deviceLinks) && $deviceLinks && !isset($deviceLinkActionText)) {
         <th data-tablesaw-sortable-col data-tablesaw-sortable-numeric><?php echo __("TABLE_HEAD_POSITION", "DEVICES"); ?></th>
         <th data-tablesaw-sortable-col><?php echo __("TABLE_HEAD_NAME", "DEVICES"); ?></th>
         <th data-tablesaw-sortable-col><?php echo __("TABLE_HEAD_IP", "DEVICES"); ?></th>
-        <th><?php echo __("TABLE_HEAD_STATE", "DEVICES"); ?></th>
+        <th><?php echo __("TAB_HL_POWER_ON_OFF", "BLINX ADD"); ?></th>
         <th data-tablesaw-sortable-col data-tablesaw-sortable-numeric>
             <i class="fas fa-signal"
                title='<?php echo __("TABLE_HEAD_RSSI", "DEVICES"); ?>'
@@ -52,22 +52,22 @@ if (isset($deviceLinks) && $deviceLinks && !isset($deviceLinkActionText)) {
             "TABLE_HEAD_HUMIDITY",
             "DEVICES"
         ); ?></th>
-        <th class='more'><?php echo __("HOSTNAME", "DEVICES"); ?></th>
+        <th class=''><?php echo __("HOSTNAME", "DEVICES"); ?></th>
         <th class='more'><?php echo __("MAC", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("MQTT", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("MQTT", "DEVICES"); ?></th>
         <th class='more idx hidden'><?php echo __(
             "TABLE_HEAD_IDX",
             "DEVICES"
         ); ?></th>
-        <th class='more'><?php echo __("POWERONSTATE", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("LEDSTATE", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("SAVEDATA", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("POWERONSTATE", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("LEDSTATE", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("SAVEDATA", "DEVICES"); ?></th>
         <th class='more'><?php echo __("SLEEP", "DEVICES"); ?></th>
         <th class='more'><?php echo __("BOOTCOUNT", "DEVICES"); ?></th>
         <th class='more'><?php echo __("SAVECOUNT", "DEVICES"); ?></th>
         <th class='more'><?php echo __("LOGSTATES", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("WIFICONFIG", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("VCC", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("WIFICONFIG", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("VCC", "DEVICES"); ?></th>
 
         <th class='link text-sm-right'>
             <a href='<?php echo _BASEURL_; ?>device_action/add'>
@@ -135,11 +135,12 @@ if (isset($devices) && !empty($devices)):
                         ); ?></a>
                     </td>
                     <td><?php echo $device_group->ip; ?></td>
-                    <td class='status'>
-                        <label class="form-switch">
+                    <td class='status'> <!-- TODO blinx -->
+                        <?php /* <label class="form-switch">
                             <input type="checkbox">
                             <i></i>
-                        </label>
+                        </label>*/ ?>
+                        <?php echo __("TAB_HL_POWER_OFF", "BLINX ADD"); ?>
 
                     </td>
                     <td class='rssi'>
@@ -189,7 +190,7 @@ if (isset($devices) && !empty($devices)):
                     </td>
 
 
-                    <td class='more hostname dblcEdit' data-cmnd='Hostname'>
+                    <td class='hostname dblcEdit' data-cmnd='Hostname'>
 														<span>
 															<div class='loader'>
 																<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
@@ -209,7 +210,7 @@ if (isset($devices) && !empty($devices)):
 															</div>
 														</span>
                     </td>
-                    <td class='more mqtt dblcEdit' data-cmnd='Mqtt'>
+                    <td class='hidden more mqtt dblcEdit' data-cmnd='Mqtt'>
 														<span>
 															<div class='loader'>
 																<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
@@ -224,7 +225,7 @@ if (isset($devices) && !empty($devices)):
 															-
 														</span>
                     </td>
-                    <td class='more poweronstate dblcEdit' data-cmnd='PowerOnState'>
+                    <td class='hidden more poweronstate dblcEdit' data-cmnd='PowerOnState'>
 														<span>
 															<div class='loader'>
 																<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
@@ -234,7 +235,7 @@ if (isset($devices) && !empty($devices)):
 															</div>
 														</span>
                     </td>
-                    <td class='more ledstate dblcEdit' data-cmnd='LedState'>
+                    <td class='hidden more ledstate dblcEdit' data-cmnd='LedState'>
 														<span>
 															<div class='loader'>
 																<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
@@ -244,7 +245,7 @@ if (isset($devices) && !empty($devices)):
 															</div>
 														</span>
                     </td>
-                    <td class='more savedata dblcEdit' data-cmnd='SaveData'>
+                    <td class='hidden more savedata dblcEdit' data-cmnd='SaveData'>
 														<span>
 															<div class='loader'>
 																<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
@@ -294,7 +295,7 @@ if (isset($devices) && !empty($devices)):
 															</div>
 														</span>
                     </td>
-                    <td class='more wificonfig dblcEdit' data-cmnd='WifiConfig'>
+                    <td class='hidden more wificonfig dblcEdit' data-cmnd='WifiConfig'>
 														<span>
 															<div class='loader'>
 																<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
@@ -304,7 +305,7 @@ if (isset($devices) && !empty($devices)):
 															</div>
 														</span>
                     </td>
-                    <td class='more vcc'>
+                    <td class='hidden more vcc'>
 														<span>
 															<div class='loader'>
 																<img src='<?php echo _RESOURCESURL_; ?>img/loading.gif'
@@ -371,6 +372,7 @@ if (isset($devices) && !empty($devices)):
                 </tr>
                 <?php
                 $odd = !$odd;
+                break;
         endforeach;
     endforeach;
 endif; ?>
@@ -396,7 +398,7 @@ endif; ?>
         <th><?php echo __("TABLE_HEAD_POSITION", "DEVICES"); ?></th>
         <th><?php echo __("TABLE_HEAD_NAME", "DEVICES"); ?></th>
         <th><?php echo __("TABLE_HEAD_IP", "DEVICES"); ?></th>
-        <th><?php echo __("TABLE_HEAD_STATE", "DEVICES"); ?></th>
+        <th><?php echo __("TAB_HL_POWER_ON_OFF", "BLINX ADD"); ?></th>
         <th>
             <i class="fas fa-signal"
                title='<?php echo __("TABLE_HEAD_RSSI", "DEVICES"); ?>'
@@ -413,22 +415,22 @@ endif; ?>
             "TABLE_HEAD_HUMIDITY",
             "DEVICES"
         ); ?></th>
-        <th class='more'><?php echo __("HOSTNAME", "DEVICES"); ?></th>
+        <th class=''><?php echo __("HOSTNAME", "DEVICES"); ?></th>
         <th class='more'><?php echo __("MAC", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("MQTT", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("MQTT", "DEVICES"); ?></th>
         <th class='more idx hidden'><?php echo __(
             "TABLE_HEAD_IDX",
             "DEVICES"
         ); ?></th>
-        <th class='more'><?php echo __("POWERONSTATE", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("LEDSTATE", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("SAVEDATA", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("POWERONSTATE", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("LEDSTATE", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("SAVEDATA", "DEVICES"); ?></th>
         <th class='more'><?php echo __("SLEEP", "DEVICES"); ?></th>
         <th class='more'><?php echo __("BOOTCOUNT", "DEVICES"); ?></th>
         <th class='more'><?php echo __("SAVECOUNT", "DEVICES"); ?></th>
         <th class='more'><?php echo __("LOGSTATES", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("WIFICONFIG", "DEVICES"); ?></th>
-        <th class='more'><?php echo __("VCC", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("WIFICONFIG", "DEVICES"); ?></th>
+        <th class='more hidden'><?php echo __("VCC", "DEVICES"); ?></th>
         <th class='link text-sm-right'>
             <a href='<?php echo _BASEURL_; ?>device_action/add'>
                 <i class="fas fa-plus add"
