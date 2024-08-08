@@ -50,6 +50,7 @@
 		</div>
 	<?php endif; //END only one friendlyname was editable v < 5.12.0h?>
 
+	<?php /* ?>
 	<div class="form-group col">
 		<label for="PowerOnState">
 			<?php echo __("CONFIG_POWERONSTATE", "DEVICE_CONFIG"); ?>
@@ -122,6 +123,7 @@
 			<?php echo __("CONFIG_LEDSTATE", "DEVICE_CONFIG"); ?>
 		</small>
 	</div>
+	<?php */ ?>
 	<div class="form-group col">
 		<label for="Sleep">
 			<?php echo __("CONFIG_SLEEP", "DEVICE_CONFIG"); ?>

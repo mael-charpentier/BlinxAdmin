@@ -8,6 +8,35 @@ $(document).on("ready", function (e) {
   });
 });
 
+$(document).ready(function () {
+  initInputSensor();
+});
+
+
+
+function initInputSensor(){
+  $("#select_all_input").change(function () {
+    let status = this.checked;
+    $("#input-list .input_checkbox:not(:disabled)").each(
+      function () {
+        this.checked = status;
+      },
+    );
+
+    $(".select_all_input").each(function () {
+      this.checked = status;
+    });
+  });
+
+  $("#modeDisplay").change(function() {
+    if(this.value == 0){
+      $("#DisplayText").removeProp("disabled", "disabled").removeClass("disabled");
+    } else {
+      $("#DisplayText").prop("disabled", "disabled").addClass("disabled");
+    }
+  });
+}
+
 function saveDefaultFormValues() {
   $.each($(".config-form"), function (idx, form) {
     var formName = $(form).attr("name");

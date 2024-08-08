@@ -35,9 +35,71 @@ class Sonoff
         return $this->doRequest($device, self::COMMAND_INFO_STATUS_ALL);
     }
 
+    public function getStatusSensor(Device $device): \stdClass
+    {
+        return $this->responseParser->processResult($this->blinxApiSensor($device, 'bi', []));
+    }
+
+    public function saveConfigSensor(Device $device, array $arg)
+    {
+        return $this->blinxApiSensor($device, 'bc', $arg);
+    }
+
+    public function saveConfigSensorJS($deviceId, array $arg)
+    {
+        $device = $this->getDeviceById($deviceId);
+
+        if (null === $device) {
+            $response = new \stdClass();
+            $response->ERROR = sprintf('No devices found with ID: %d', $deviceId);
+
+            return $response;
+        }
+        
+        return $this->saveConfigSensor($device, $arg);
+    }
+
+    public function saveNewHostname($deviceId, string $newName)
+    {
+        $device = $this->getDeviceById($deviceId);
+
+        if (null === $device) {
+            $response = new \stdClass();
+            $response->ERROR = sprintf('No devices found with ID: %d', $deviceId);
+
+            return $response;
+        }
+
+        $arg = [];
+        $arg["name"] = $newName;
+        
+        return $this->blinxApiSensor($device, 'bn', $arg);
+    }
+
+    public function blinxApiSensor(Device $device, String $endpoint, array $arg)
+    {
+        $url = $this->buildUrl($device, $endpoint, $arg);
+
+        try {
+            $result = $this->client->get($url)->getBody();
+        } catch (GuzzleException $exception) {
+            $result = new \stdClass();
+            $result->ERROR = __('CURL_ERROR', 'API').' => '.$exception->getMessage();
+
+            return $result;
+        }
+
+        return $result->getContents();
+    }
+
     public function buildCmndUrl(Device $device, string $cmnd): string
     {
         return $this->buildUrl($device, 'cm', ['cmnd' => $cmnd]);
+    }
+
+    public function buildInfoUrl(Device $device): string
+    {
+        return $this->buildUrl($device, 'bi');
     }
 
     public function backup(Device $device, string $downloadPath): string

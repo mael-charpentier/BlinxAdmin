@@ -13,7 +13,82 @@ $device = $Sonoff->getDeviceById($device_id);
 
 if(!empty($_POST[ "save" ])) {
     $activeTabIndex = $_POST[ "tab-index" ];
-    if(isset($_POST[ "save" ])) {
+	if ($activeTabIndex == 2){
+		// config analog sensor
+		$arrayAnalogType = ["None", "Relay", "Relay_i", "PWM", "PWM_i", "ADC Joystick", "ADC Temp", "ADC Light", "ADC Button", "ADC Button_i", "ADC Range", "ADC CT Power", "ADC Input"];
+		$config = [];
+		if (isset($_POST[ "defaultSensor" ])){
+			echo $_POST[ "defaultSensor" ];
+			if ($_POST[ "defaultSensor" ] == 0){
+				$config["led"] = "on";
+			} else if ($_POST[ "defaultSensor" ] == 1){
+				$config["buzzer"] = "on";
+			}
+		}
+		foreach (["1A", "1B", "2A", "2B"] as $idPort):
+			$nameArg = "Port" . $idPort;
+			if (isset($_POST[ $nameArg ])){
+				$config["port" . $idPort] = $arrayAnalogType[$_POST[ $nameArg ]];
+			}
+		endforeach;
+
+        $result = $Sonoff->saveConfigSensor($device, $config);
+
+	} else if ($activeTabIndex == 3){
+		// input sensor
+		$config = [];
+		$delta_list = ["50ms", "1s", "10s", "1m", "10m", "1h"];
+		if($_POST[ "deltaTime" ] != -1){
+			$config["delta"] = $delta_list[$_POST[ "deltaTime" ]];
+		}
+		$config["n"] = 10;
+
+		$csvSensor = "";
+		if(ISSET($_POST["sensors_input"])){
+			$csvSensor .= implode(',', $_POST["sensors_input"]);
+		}
+		$csvSensor .= ".csv";
+		
+
+		$resultSensor = $Sonoff->blinxApiSensor($device, $csvSensor, $config);
+	} else if ($activeTabIndex == 4){
+		// output sensor
+		if(isset($_POST[ "type" ])) {
+			if(isset($_POST[ "type" ]) == "relay") {
+				$config = [];
+				if($_POST[ "port" ] == "default"){
+					$config["device"] = "led";
+				} else{
+					$config["device"] = "Port".$_POST[ "port" ];
+				}
+
+				if($_POST[ "PortRelay" ] != -1){
+					$config["action"] = $_POST[ "PortRelay" ];
+				}
+
+				$result = $Sonoff->blinxApiSensor($device, "br", $config);
+			} else if(isset($_POST[ "type" ]) == "pwm") {
+				$config = [];
+				if($_POST[ "port" ] == "default"){
+					$config["device"] = "buzzer";
+				} else{
+					$config["device"] = "Port".$_POST[ "port" ];
+				}
+
+				if($_POST[ "PortFreq" ] != -1){
+					$config["freq"] = $_POST[ "PortFreq" ];
+				}
+				if($_POST[ "PortValue" ] != -1){
+					$config["value"] = $_POST[ "PortValue" ];
+				}
+				if($_POST[ "PortPhase" ] != -1){
+					$config["phase"] = $_POST[ "PortPhase" ];
+				}
+
+				$result = $Sonoff->blinxApiSensor($device, "bp", $config);
+			}
+		}
+	} else if(isset($_POST[ "save" ])) {
         unset($_POST[ "save" ]);
         unset($_POST[ "tab-index" ]);
         $settings = $_POST;
@@ -55,7 +130,7 @@ $status = $Sonoff->getAllStatus($device);
 
 if(empty($status->ERROR)) {
     $status->statusNTP = $Sonoff->getNTPStatus($device);
-    if(empty($status->StatusMQT)) {
+    /*if(empty($status->StatusMQT)) {
         $status->StatusMQT = new stdClass();
     }
     $status->StatusMQT->FullTopic   = $Sonoff->getFullTopic($device);
@@ -69,12 +144,15 @@ if(empty($status->ERROR)) {
     sleep(1);
     $status->StatusMQT->StateTexts = $Sonoff->getStateTexts($device);
     sleep(1);
-    $status->StatusMQT->MqttFingerprint = $Sonoff->getMqttFingerprint($device);
+    $status->StatusMQT->MqttFingerprint = $Sonoff->getMqttFingerprint($device);*/
 
 
     $status->StatusLOG->SetOptionDecoded = $Sonoff->decodeOptions($status->StatusLOG->SetOption[ 0 ]);
 }
 
+
+$statusSensor = $Sonoff->getStatusSensor($device);
+//echo var_dump($statusSensor);
 
 ?>
 <div class='row justify-content-sm-center'>
@@ -89,7 +167,7 @@ if(empty($status->ERROR)) {
 		</div>
 		<div class='row'>
 			<div class='col col-12 mb-5'>
-				<div class='text-center'>
+				<div class='text-center'><!-- TODO blinx -->
 					ID: <?php echo $device->id; ?>
 					<a href='http://<?php echo $device->ip; ?>' target='_blank'><?php echo $device->ip; ?>  </a>
 				</div>
@@ -146,13 +224,35 @@ if(empty($status->ERROR)) {
 						</li>
 						<li class="nav-item">
 							<a class="nav-link <?php echo $activeTabIndex == 2 ? "active" : ""; ?>"
-							   id="config_mqtt_tab-tab"
+							   id="config_sensor_config_tab-tab"
 							   data-toggle="tab"
-							   href="#config_mqtt_tab"
+							   href="#config_sensor_config_tab"
 							   role="tab"
 							   aria-controls="profile"
 							   aria-selected="false">
-								<?php echo __("TAB_HL_MQTT", "DEVICE_CONFIG"); ?>
+								<?php echo __("TAB_HL_SENSOR_CONFIG", "BLINX ADD"); ?>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link <?php echo $activeTabIndex == 3 ? "active" : ""; ?>"
+							   id="config_sensor_input_tab-tab"
+							   data-toggle="tab"
+							   href="#config_sensor_input_tab"
+							   role="tab"
+							   aria-controls="profile"
+							   aria-selected="false">
+								<?php echo __("TAB_HL_SENSOR_INPUT", "BLINX ADD"); ?>
+							</a>
+						</li>
+						<li class="nav-item">
+							<a class="nav-link <?php echo $activeTabIndex == 4 ? "active" : ""; ?>"
+							   id="config_sensor_output_tab-tab"
+							   data-toggle="tab"
+							   href="#config_sensor_output_tab"
+							   role="tab"
+							   aria-controls="profile"
+							   aria-selected="false">
+								<?php echo __("TAB_HL_SENSOR_OUTPUT", "BLINX ADD"); ?>
 							</a>
 						</li>
 
@@ -171,10 +271,22 @@ if(empty($status->ERROR)) {
 							<?php include_once _PAGESDIR_."device_config_tabs/config_network_tab.php"; ?>
 						</div>
 						<div class="tab-pane fade <?php echo $activeTabIndex == 2 ? "show active" : ""; ?>"
-							 id="config_mqtt_tab"
+							 id="config_sensor_config_tab"
 							 role="tabpanel"
-							 aria-labelledby="config_mqtt_tab-tab">
-							<?php include_once _PAGESDIR_ . "device_config_tabs/config_mqtt_tab.php"; ?>
+							 aria-labelledby="config_sensor_config_tab-tab">
+							<?php include_once _PAGESDIR_ . "device_config_tabs/config_sensor_config_tab.php"; ?>
+						</div>
+						<div class="tab-pane fade <?php echo $activeTabIndex == 3 ? "show active" : ""; ?>"
+							 id="config_sensor_input_tab"
+							 role="tabpanel"
+							 aria-labelledby="config_sensor_input_tab-tab">
+							<?php include_once _PAGESDIR_ . "device_config_tabs/config_sensor_input_tab.php"; ?>
+						</div>
+						<div class="tab-pane fade <?php echo $activeTabIndex == 4 ? "show active" : ""; ?>"
+							 id="config_sensor_output_tab"
+							 role="tabpanel"
+							 aria-labelledby="config_sensor_output_tab-tab">
+							<?php include_once _PAGESDIR_ . "device_config_tabs/config_sensor_output_tab.php"; ?>
 						</div>
 					</div>
 				</div>
