@@ -35,8 +35,11 @@ quality:
 	cd tasmoadmin; ./vendor/bin/phpunit
 	cd tasmoadmin; php -d memory_limit=4G ./vendor/bin/phpstan
 
-dev:
+update-dev:
 	./.docker/docker.sh prepare
 	composer install -d tasmoadmin
-	cd tasmoadmin; npm ci; npm run build
-	docker-compose build  --no-cache && docker-compose up
+	cd tasmoadmin; npm ci;
+
+dev: update-dev
+	cd tasmoadmin; npm run build
+	docker compose build  --no-cache && docker compose up
