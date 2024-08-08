@@ -19,6 +19,22 @@ if (isset($_GET["doAjax"])) {
     die();
 }
 
+if (isset($_GET["saveConfigSensor"])) {
+    session_write_close(); //stop blocking other ajax batch
+    $data = $Sonoff->saveConfigSensorJS($_REQUEST["id"], json_decode($_REQUEST['config'], true));
+    header('Content-Type: application/json');
+    echo json_encode($data);
+    die();
+}
+
+if (isset($_GET["saveNewHostname"])) {
+    session_write_close(); //stop blocking other ajax batch
+    $data = $Sonoff->saveNewHostname($_REQUEST["id"], $_REQUEST['newName']);
+    header('Content-Type: application/json');
+    echo json_encode($data);
+    die();
+}
+
 if(isset($_GET["doAjaxAll"])) {
     session_write_close(); //stop blocking other ajax batch
     $data = $Sonoff->doAjaxAll();

@@ -107,34 +107,70 @@ $(document).ready(function () {
 });
 
 function initCommandHelper() {
-  $(".showCommandInput").on("click", function (e) {
+  $(".showConfigSensor").on("click", function (e) {
     $(this).toggleClass("btn-secondary").toggleClass("btn-primary");
-    $(".command-hidden").toggleClass("d-none");
+    $(".config-hidden").toggleClass("d-none");
+    $(".hostname-hidden").addClass("d-none");
     $(".delete-hidden").addClass("d-none");
-    $(".showDelete").toggleClass("btn-primary").toggleClass("btn-secondary");
-    $(".cmd_cb").toggleClass("d-none").find("input").prop("checked", false);
-    $(".cmdContainer ").removeClass("has-error");
-    $(".cmdContainer ").find("input").val("");
-    $(".cmdContainer ").find("#commandInputError").html("");
+    $(".showChangHostname").removeClass("btn-primary").addClass("btn-secondary");
+    $(".showDelete").removeClass("btn-primary").addClass("btn-secondary");
+    if($(".config-hidden").hasClass("d-none")){
+      $(".cmd_cb").addClass("d-none").find("input").prop("checked", false);
+    } else{
+      $(".cmd_cb").removeClass("d-none").find("input").prop("checked", false);
+    }
+    $(".configInputError ").removeClass("has-error");
+    //$(".cmdContainer ").find("input").val("");
+    $(".configInputError ").find("#configInputError").html("");
+  });
+  $(".showChangHostname").on("click", function (e) {
+    $(this).toggleClass("btn-secondary").toggleClass("btn-primary");
+    $(".config-hidden").addClass("d-none");
+    $(".hostname-hidden").toggleClass("d-none");
+    $(".delete-hidden").addClass("d-none");
+    $(".showConfigSensor").removeClass("btn-primary").addClass("btn-secondary");
+    $(".showDelete").removeClass("btn-primary").addClass("btn-secondary");
+    if($(".hostname-hidden").hasClass("d-none")){
+      $(".cmd_cb").addClass("d-none").find("input").prop("checked", false);
+    } else{
+      $(".cmd_cb").removeClass("d-none").find("input").prop("checked", false);
+    }
+    $(".hostnameContainer ").removeClass("has-error");
+    //$(".cmdContainer ").find("input").val("");
+    $(".hostnameContainer ").find("#hostnameInputError").html("");
   });
 
   $(".showDelete").on("click", function (e) {
     $(this).toggleClass("btn-secondary").toggleClass("btn-primary");
+    $(".config-hidden").addClass("d-none");
+    $(".hostname-hidden").addClass("d-none");
     $(".delete-hidden").toggleClass("d-none");
-    $(".command-hidden").addClass("d-none");
-    $(".showCommand").toggleClass("btn-primary").toggleClass("btn-secondary");
-    $(".cmd_cb").toggleClass("d-none").find("input").prop("checked", false);
+    $(".showConfigSensor").removeClass("btn-primary").addClass("btn-secondary");
+    $(".showChangHostname").removeClass("btn-primary").addClass("btn-secondary");
+    if($(".delete-hidden").hasClass("d-none")){
+      $(".cmd_cb").addClass("d-none").find("input").prop("checked", false);
+    } else{
+      $(".cmd_cb").removeClass("d-none").find("input").prop("checked", false);
+    }
     $(".deleteContainer ").removeClass("has-error");
-    $(".deleteContainer ").find("input").val("");
-    $(".cmdContainer ").find("#commandInputError").html("");
+    //$(".deleteContainer ").find("input").val("");
+    //$(".cmdContainer ").find("#commandInputError").html("");
   });
 
-  $(".cmdContainer ")
+  $(".configContainer ")
     .find("input")
     .keypress(function (e) {
       if (e.which == 13) {
         //Enter key pressed
-        $(".sendCommand").click(); //Trigger search button click event
+        $(".configCommand").click(); //Trigger search button click event
+      }
+    });
+  $(".hostnameContainer ")
+    .find("input")
+    .keypress(function (e) {
+      if (e.which == 13) {
+        //Enter key pressed
+        $(".hostnameCommand").click(); //Trigger search button click event
       }
     });
 
@@ -160,12 +196,12 @@ function initCommandHelper() {
     location.reload();
   });
 
-  $(".sendCommand").on("click", function (e) {
+  $(".configCommand").on("click", function (e) {
     $(this)
       .parent()
       .parent()
       .removeClass("has-error")
-      .find("#commandInputError")
+      .find("#configInputError")
       .addClass("d-none")
       .html("");
 
@@ -175,31 +211,35 @@ function initCommandHelper() {
         .parent()
         .parent()
         .addClass("has-error")
-        .find("#commandInputError")
+        .find("#configInputError")
         .removeClass("d-none")
         .html($.i18n("ERROR_COMMAND_NO_DEVICE_SELECTED"));
       return false;
     }
 
-    let cmnd = $(this).parent().parent().find(".commandInput").val();
-    if (cmnd === "") {
-      $(this)
-        .parent()
-        .parent()
-        .addClass("has-error")
-        .find("#commandInputError")
-        .removeClass("d-none")
-        .html($.i18n("ERROR_PLS_ENTER_COMMAND"));
-      return false;
-    }
+		let arrayAnalogType = ["None", "Relay", "Relay_i", "PWM", "PWM_i", "ADC Joystick", "ADC Temp", "ADC Light", "ADC Button", "ADC Button_i", "ADC Range", "ADC CT Power", "ADC Input"];
+		let config = {};
+    let v = Number($("#defaultSensor")[0].value);
+		if (v == 0){
+			config["led"] = "on";
+		} else if (v == 1){
+			config["buzzer"] = "on";
+		}
+
+    $.each(["1A", "1B", "2A", "2B"], function (idx, idPort) {
+			let nameArg = "Port" + idPort;
+			config["port" + idPort] = arrayAnalogType[Number($("#" + nameArg)[0].value)];
+    });
+
 
     $.each(selectedDevices, function (idx, device_id) {
-      sonoff.generic(device_id, cmnd, undefined, function (result) {
+      sonoff.saveConfigSensor(device_id, config, function (result) {
         let device_name = $("[data-device_id=" + device_id + "]:first")
           .find(".device_name a")
           .text()
           .trim();
-        $("#commandInputError").append(
+          console.log(config, result, device_id, device_name, $("#configInputError"));
+        $("#configInputError").append(
           "ID " +
             device_id +
             " (" +
@@ -214,7 +254,81 @@ function initCommandHelper() {
     $(this)
       .parent()
       .parent()
-      .find("#commandInputError")
+      .find("#configInputError")
+      .removeClass("d-none")
+      .append($.i18n("SUCCESS_COMMAND_SEND") + "</br>");
+  });
+
+  $(".hostnameContainer").on("click", function (e) {
+    $(this)
+      .parent()
+      .parent()
+      .removeClass("has-error")
+      .find("#hostnameInputError")
+      .addClass("d-none")
+      .html("");
+
+    let selectedDevices = getSelectedDevices();
+    if (selectedDevices.length === 0) {
+      $(this)
+        .parent()
+        .parent()
+        .addClass("has-error")
+        .find("#hostnameInputError")
+        .removeClass("d-none")
+        .html($.i18n("ERROR_COMMAND_NO_DEVICE_SELECTED"));
+      return false;
+    }
+
+    let newName = $(this).parent().parent().find(".hostnameInput").val();
+    let beginNmb = $(this).parent().parent().find(".hostnameInputBegin").val();
+    let stepNmb = $(this).parent().parent().find(".hostnameInputStep").val();
+    
+    if (newName === "" || beginNmb == "" || stepNmb == "") {
+      $(this)
+        .parent()
+        .parent()
+        .addClass("has-error")
+        .find("#configInputError")
+        .removeClass("d-none")
+        .html($.i18n("ERROR_PLS_ENTER_COMMAND"));
+      return false;
+    }
+
+    lambdaFunc_put0number = function (n, l){
+      t = "";
+      for (i = 1; i < l; i++){
+        if ( n < Math.pow(10, i)){
+          t += "0";
+        }
+      }
+      return t + n;
+    }
+
+    $.each(selectedDevices, function (idx, device_id) {
+      let t = newName.replace("%i", lambdaFunc_put0number(beginNmb, 3));
+      beginNmb += stepNmb;
+      sonoff.saveNewHostname(device_id, t, function (result) {
+        let device_name = $("[data-device_id=" + device_id + "]:first")
+          .find(".device_name a")
+          .text()
+          .trim();
+        $("#hostnameInputError").append(
+          "ID " +
+            device_id +
+            " (" +
+            device_name +
+            ") => " +
+            JSON.stringify(result) +
+            "<br/>",
+        );
+      });
+    });
+
+    $(this)
+      .parent()
+      .parent()
+      .find("#hostnameInputError")
       .removeClass("d-none")
       .append($.i18n("SUCCESS_COMMAND_SEND") + "</br>");
   });
@@ -245,6 +359,22 @@ function updateStatus() {
         console.log(
           "[Devices][updateStatus]SKIP multi " + $(tr).data("device_ip"),
         );
+
+
+        if (device_group === "multi") {
+          $(
+            '#device-list tbody tr[data-device_group="multi"][data-device_ip="' +
+              device_ip +
+              '"]',
+          ).each(function (key, grouptr) {
+            $(grouptr)
+              .find(".status")[0].innerHTML = "OFF";  // TODO BLINX
+          });
+        } else {
+          $(tr)
+            .find(".status")[0].innerHTML = "OFF"; // TODO BLINX
+        }
+
         return; //relais 1 will update all others
       }
 
@@ -604,7 +734,10 @@ function updateRow(row, data, device_status) {
 
   if ($(row).hasClass("toggled")) {
     $(row).removeClass("toggled");
-  } else {
+  } else { // TODO blinx
+    $(row)
+      .find(".status")[0].innerHTML = "ON"; // TODO BLINX the off
+    /*
     if (device_status === "ON") {
       $(row)
         .find(".status")
@@ -664,7 +797,7 @@ function updateRow(row, data, device_status) {
         .prop("checked", false)
         .parent()
         .removeClass("error");
-    }
+    }*/
   }
 
   let startup =

@@ -69,8 +69,13 @@ $devices = $Sonoff->getDevices();
 					</div>
 				</div>
 				<div class="col col-auto ">
-					<button class='btn btn-secondary showCommandInput'>
-						<?php echo __("BTN_COMMAND", "DEVICES"); ?>
+					<button class='btn btn-secondary showConfigSensor'>
+						<?php echo __("TAB_HL_SENSOR_CONFIG", "BLINX ADD"); ?>
+					</button>
+				</div>
+				<div class="col col-auto ">
+					<button class='btn btn-secondary showChangHostname'>
+						<?php echo __("TAB_HL_CHANGE_HOSTNAME", "BLINX ADD"); ?>
 					</button>
 				</div>
 				<div class="col col-auto ">
@@ -94,16 +99,41 @@ $devices = $Sonoff->getDevices();
 					</div>
 				</div>
 			</div>
-			<div class='cmdContainer row command-hidden d-none my-3'>
+			<div class='configContainer row config-hidden d-none my-3'>
+				<div class="form-group col col-12 col-sm-7 col-md-8 col-lg-9 offset-0 offset-sm-1 mb-3 mb-sm-0">
+					<?php 
+						$statusSensor = new stdClass();
+						include_once _PAGESDIR_."device_config_tabs/config_sensor.php";
+					?>
+				</div>
+				<small id="configInputError" class="form-text col-12 col-sm-11 offset-0 offset-sm-1 d-none  px-0">
+				</small>
+			</div>
+			<div class='hostnameContainer row hostname-hidden d-none my-3'>
 				<div class="form-group col col-12 col-sm-6 col-md-7 col-lg-8 offset-0 offset-sm-1 mb-3 mb-sm-0">
-					<input type='text' name='command' class='form-control commandInput'>
+					<span>
+						<?php echo __("TAB_HL_BASE_HOSTNAME", "BLINX ADD"); ?>
+					</span>
+					<input type='text' name='command' class='form-control hostnameInput' placeholder='new hostname'>
+				</div>
+				<div class="form-group col col-12 col-sm-6 col-md-7 col-lg-8 offset-0 offset-sm-1 mb-3 mb-sm-0">
+					<span>
+						<?php echo __("TAB_HL_BEGIN_ID_HOSTNAME", "BLINX ADD"); ?>
+					</span>
+					<input type='number' name='command' class='form-control hostnameInputBegin' min="0" value="0">
+				</div>
+				<div class="form-group col col-12 col-sm-6 col-md-7 col-lg-8 offset-0 offset-sm-1 mb-3 mb-sm-0">
+					<span>
+						<?php echo __("TAB_HL_STEP_ID_HOSTNAME", "BLINX ADD"); ?>
+					</span>
+					<input type='number' name='command' class='form-control hostnameInputStep' min="1"  value="1">
 				</div>
 				<div class="form-group col col-12 col-sm-4 col-md-3 col-lg-2 mb-0">
 					<button type='submit' class='btn btn-primary sendCommand w-100' name='sendCommand'>
-						<?php echo __("SEND_COMMAND", "DEVICES"); ?>
+						<?php echo __("TAB_HL_SAVE_HOSTNAME", "BLINX ADD"); ?>
 					</button>
 				</div>
-				<small id="commandInputError" class="form-text col-12 col-sm-11 offset-0 offset-sm-1 d-none  px-0">
+				<small id="hostnameInputError" class="form-text col-12 col-sm-11 offset-0 offset-sm-1 d-none  px-0">
 				</small>
 			</div>
 			<div class='deleteContainer row delete-hidden d-none my-3'>

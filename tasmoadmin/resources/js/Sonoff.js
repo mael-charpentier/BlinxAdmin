@@ -52,6 +52,14 @@ class Sonoff {
     this._doAjax(null, device_id, cmnd, callback);
   }
 
+  saveConfigSensor(device_id, config, callback) {
+    this._doAjaxConfig(null, device_id, config, callback);
+  }
+
+  saveNewHostname(device_id, newName, callback) {
+    this._doAjaxNewHostname(null, device_id, newName, callback);
+  }
+
   /**
    * getStatus
    *
@@ -113,6 +121,74 @@ class Sonoff {
       },
       success: function (data) {
         console.log("[Sonoff][doAjax][" + ip + "] Got response from: " + cmnd);
+        if (data.WARNING) {
+          alert(ip + ": " + data.WARNING);
+        }
+        callback(data);
+      },
+      error: function (data, xmlhttprequest, textstatus, message) {
+        callback(data);
+      },
+    });
+  }
+
+  /**
+   * _doAjaxConfig
+   * @param {string} ip
+   * @param {int} id
+   * @param {object} config
+   * @param {callback} callback
+   * @private
+   */
+  _doAjaxConfig(ip, id, config, callback) {
+    var ip = ip || id;
+    $.ajax({
+      dataType: "json",
+      url: `${this.options.base_url}actions?saveConfigSensor`,
+      timeout: this.options.timeout * 1000,
+      cache: false,
+      type: "post",
+      async: true,
+      data: {
+        id: id,
+        config: JSON.stringify(config),
+      },
+      success: function (data) {
+        console.log("[Sonoff][doAjaxConfig][" + ip + "] Got response from: " + config);
+        if (data.WARNING) {
+          alert(ip + ": " + data.WARNING);
+        }
+        callback(data);
+      },
+      error: function (data, xmlhttprequest, textstatus, message) {
+        callback(data);
+      },
+    });
+  }
+
+  /**
+   * _doAjaxNewHostname
+   * @param {string} ip
+   * @param {int} id
+   * @param {newName} string
+   * @param {callback} callback
+   * @private
+   */
+  _doAjaxNewHostname(ip, id, newName, callback) {
+    var ip = ip || id;
+    $.ajax({
+      dataType: "json",
+      url: `${this.options.base_url}actions?saveNewHostname`,
+      timeout: this.options.timeout * 1000,
+      cache: false,
+      type: "post",
+      async: true,
+      data: {
+        id: id,
+        newName: newName,
+      },
+      success: function (data) {
+        console.log("[Sonoff][doAjaxNewHostname][" + ip + "] Got response from: " + newName);
         if (data.WARNING) {
           alert(ip + ": " + data.WARNING);
         }
